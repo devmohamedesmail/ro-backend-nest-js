@@ -39,10 +39,12 @@ export class RoleService {
                 throw new BadRequestException('Role already exists');
             }
 
+            const slug = this.generateSlug(name);
             const role = await this.prisma.role.create({
                 data: {
                     name,
                     description,
+                    slug
                 },
             });
 
@@ -87,4 +89,15 @@ export class RoleService {
             throw error;
         }
     }
+
+
+
+    private generateSlug(name: string): string {
+    return name
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-')        
+        .replace(/[^\w\-]+/g, '') 
+        .replace(/\-\-+/g, '-');    
+}
 }
